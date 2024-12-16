@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Search Results - Choosy's Search">
+    <title>Search Results - Choosy's Search</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Styling -->
+    <style>
+        :root {
+            --base-color: white;
+            --base-variant: #e8e9ed;
+            --text-color: #111528;
+            --secondary-text: #232738;
+            --primary-color: #3a435d;
+            --accent-color: #0071ff;
+            --border-before-color: #aaa;
+            --border-after-color: #47C9FF;
+            --border-height: 2px;
+        }
+
+        .darkmode {
+            --base-color: #070b1d;
+            --base-variant: #101425;
+            --text-color: #ffffff;
+            --secondary-text: #a4a5b8;
+            --primary-color: #3a435d;
+            --accent-color: #0071ff;
+            --border-before-color: #444;
+            --border-after-color: #FFBF59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--base-color);
+            color: var(--text-color);
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--primary-color);
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .logo {
+            color: var(--base-color);
+            text-decoration: none;
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px 20px;
+            width: 100%;
+        }
+
+        /* Search Results Styling */
+        .search-results {
+            background-color: var(--base-variant);
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        /* Basic reset for Google elements */
+        .gsc-control-cse {
+            font-family: inherit !important;
+            border: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+        }
+
+        /* Search box styling in header */
+        .header-content .gsc-control-searchbox-only {
+            flex-grow: 1;
+            max-width: 600px;
+        }
+
+        /* Results container */
+        .gsc-results-wrapper-visible {
+            position: relative !important;
+            display: block !important;
+            opacity: 1 !important;
+            transform: none !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            margin: 0 !important;
+            background: transparent !important;
+        }
+
+        /* Individual result styling */
+        .gsc-webResult.gsc-result {
+            padding: 20px !important;
+            margin-bottom: 15px !important;
+            background-color: var(--base-color) !important;
+            border-radius: 12px !important;
+            border: 1px solid var(--border-before-color) !important;
+            transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .gsc-webResult.gsc-result:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2) !important;
+            border-color: var(--accent-color) !important;
+        }
+
+        /* Result title */
+        .gs-title {
+            color: #0071ff !important;
+            text-decoration: none !important;
+            font-size: 1.2em !important;
+            font-weight: 500 !important;
+            margin-bottom: 8px !important;
+            display: block !important;
+        }
+
+        .gs-title:hover {
+            color: #47C9FF !important;
+            text-decoration: underline !important;
+        }
+
+        .gs-title b {
+            color: #47C9FF !important;
+        }
+
+        /* Result snippet */
+        .gs-snippet {
+            color: var(--text-color) !important;
+            font-size: 0.95em !important;
+            line-height: 1.6 !important;
+            margin: 10px 0 !important;
+        }
+
+        .gs-snippet b {
+            color: #FFBF59 !important;
+            font-weight: 500 !important;
+        }
+
+        /* URL styling */
+        .gsc-url-top {
+            color: #4CAF50 !important;
+            font-size: 0.9em !important;
+            opacity: 0.9 !important;
+        }
+
+        /* Pagination styling */
+        .gsc-cursor-box {
+            text-align: center !important;
+            margin-top: 30px !important;
+        }
+
+        .gsc-cursor-page {
+            padding: 8px 12px !important;
+            margin: 0 4px !important;
+            border-radius: 6px !important;
+            background: var(--base-color) !important;
+            color: var(--text-color) !important;
+            border: 1px solid var(--border-before-color) !important;
+            transition: all 0.3s ease !important;
+        }
+
+        .gsc-cursor-page:hover {
+            background: var(--accent-color) !important;
+            color: white !important;
+            border-color: var(--accent-color) !important;
+        }
+
+        .gsc-cursor-current-page {
+            background: var(--accent-color) !important;
+            color: white !important;
+            border-color: var(--accent-color) !important;
+        }
+
+        /* Search box in header */
+        .gsc-search-box {
+            max-width: 100% !important;
+        }
+
+        .gsc-input-box {
+            border: none !important;
+            background: var(--base-color) !important;
+            border-radius: 8px !important;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .gsc-input {
+            padding: 8px 12px !important;
+        }
+
+        .gsc-search-button-v2 {
+            padding: 10px 24px !important;
+            border-radius: 8px !important;
+            background-color: var(--accent-color) !important;
+            border: none !important;
+        }
+
+        .gsc-search-button-v2:hover {
+            background-color: #0058cc !important;
+        }
+
+        /* Remove unwanted elements */
+        .gcsc-find-more-on-google,
+        .gcsc-more-maybe-branding-root,
+        .gcse-searchbox .gcsc-branding,
+        .gsc-branding,
+        .gsc-branding-text,
+        .gsc-branding-img,
+        .gsc-branding-img-noclear,
+        .gcsc-branding {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            width: 0 !important;
+            height: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+
+        /* Adjust search box container to remove extra space */
+        .gsc-control-searchbox-only table,
+        .gsc-search-box {
+            margin-bottom: 0 !important;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--base-color);
+            padding: 20px;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <a href="index.html" class="logo">Choosy's Search</a>
+            <div class="gcse-searchbox-only" 
+                 data-resultsUrl="results.html"
+                 data-enableHistory="true"
+                 data-autoCompleteMaxCompletions="5"
+                 data-newWindow="false">
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="search-results">
+            <div class="gcse-searchresults-only" 
+                 data-queryParameterName="q" 
+                 data-enableHistory="true" 
+                 data-linkTarget="_blank"
+                 data-noResultsString="No results found"
+                 data-newWindow="false"
+                 data-resultsUrl="results.html"
+                 data-as_sitesearch="">
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 | <a href="#">Privacy Policy</a></p>
+    </footer>
+
+    <!-- Google Custom Search Script -->
+    <script async src="https://cse.google.com/cse.js?cx=10110e1df76294941"></script>
+
+    <!-- Theme Script (keep this to maintain theme state) -->
+    <script>
+        // Check for saved theme preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('darkmode');
+        }
+    </script>
+</body>
+</html> 
