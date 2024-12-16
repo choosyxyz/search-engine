@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Google Custom Search Engine - Search the web with ease.">
+    <title>Choosy's Search</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Styling -->
+    <style>
+        :root {
+            --base-color: white;
+            --base-variant: #e8e9ed;
+            --text-color: #111528;
+            --secondary-text: #232738;
+            --primary-color: #3a435d;
+            --accent-color: #0071ff;
+            --border-before-color: #aaa;
+            --border-after-color: #47C9FF;
+            --border-height: 2px;
+        }
+
+        .darkmode {
+            --base-color: #070b1d;
+            --base-variant: #101425;
+            --text-color: #ffffff;
+            --secondary-text: #a4a5b8;
+            --primary-color: #3a435d;
+            --accent-color: #0071ff;
+            --border-before-color: #444;
+            --border-after-color: #FFBF59;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background-color: var(--base-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0;
+        }
+
+        header {
+            width: 100%;
+            padding: 80px 20px;
+            text-align: center;
+            background-color: var(--primary-color);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 4em;
+            font-weight: 700;
+            color: var(--base-color);
+            margin: 0;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        main {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 50px;
+            padding: 40px 20px;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        .search-container {
+            background-color: var(--base-variant);
+            padding: 60px;
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .search-container h2 {
+            font-size: 2.5em;
+            color: var(--primary-color);
+            margin-bottom: 40px;
+        }
+
+        /* Search Bar Styling */
+        .form-control {
+            display: none;
+        }
+
+        .input {
+            color: var(--text-color);
+            font-size: 1.2rem;
+            background-color: transparent;
+            width: 100%;
+            padding-inline: 1em;
+            padding-block: 0.8em;
+            border: none;
+            border-bottom: var(--border-height) solid var(--border-before-color);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input:focus {
+            outline: none;
+        }
+
+        .input:focus + .input-border {
+            width: 100%;
+        }
+
+        .input-border {
+            position: absolute;
+            background: var(--border-after-color);
+            width: 0%;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            transition: width 0.3s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+        }
+
+        .input-alt {
+            font-size: 1.2rem;
+            padding-inline: 1em;
+            padding-block: 0.8em;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .input-border-alt {
+            height: 3px;
+            background: linear-gradient(90deg, #FF6464 0%, #FFBF59 50%, #47C9FF 100%);
+            transition: width 0.4s cubic-bezier(0.42, 0, 0.58, 1.00);
+        }
+
+        .input-alt:focus + .input-border-alt {
+            width: 100%;
+        }
+
+        footer {
+            width: 100%;
+            padding: 30px 20px;
+            background-color: var(--primary-color);
+            text-align: center;
+            color: #e1e1e1;
+            font-size: 1.2em;
+        }
+
+        footer a {
+            color: var(--accent-color);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Theme Switcher Styling */
+        #theme-switch {
+            height: 60px;
+            width: 60px;
+            padding: 12px;
+            border-radius: 50%;
+            background-color: var(--base-variant);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        #theme-switch:hover {
+            transform: scale(1.1);
+        }
+
+        #theme-switch svg {
+            fill: var(--text-color);
+            transition: fill 0.3s ease;
+        }
+
+        #theme-switch svg:last-child {
+            display: none;
+        }
+
+        .darkmode #theme-switch svg:first-child {
+            display: none;
+        }
+
+        .darkmode #theme-switch svg:last-child {
+            display: block;
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 768px) {
+            main {
+                padding: 20px;
+            }
+
+            .search-container {
+                padding: 40px;
+            }
+
+            .cta-button {
+                padding: 15px 30px;
+                font-size: 1.2em;
+            }
+        }
+
+        /* Add these styles to customize the Google Search Element */
+        .search-container .gsc-control-cse {
+            background-color: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        .search-container .gsc-search-box {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-container .gsc-input-box {
+            border: none;
+            background: transparent;
+            box-shadow: none;
+        }
+
+        .search-container .gsc-input {
+            padding: 0 !important;
+        }
+
+        .search-container .gsc-input-box input {
+            color: var(--text-color) !important;
+            font-size: 1.2rem !important;
+            background-color: transparent !important;
+            padding-inline: 1em !important;
+            padding-block: 0.8em !important;
+            border: none !important;
+            border-bottom: var(--border-height) solid var(--border-before-color) !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .search-container .gsc-search-button-v2 {
+            padding: 12px 24px;
+            border-radius: 4px;
+            background-color: var(--accent-color);
+            border: none;
+            margin-left: 10px;
+        }
+
+        .search-container .gsc-search-button-v2:hover {
+            background-color: var(--accent-color);
+            opacity: 0.9;
+        }
+
+        /* Add these styles after the existing Google Search Element styles */
+
+        /* Search Results Styling */
+        .search-container .gsc-results-wrapper-overlay {
+            background-color: var(--base-color) !important;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+        }
+
+        .search-container .gsc-result-info {
+            color: var(--text-color) !important;
+            padding-left: 0 !important;
+        }
+
+        .search-container .gsc-table-result {
+            margin-bottom: 20px !important;
+        }
+
+        .search-container .gs-title {
+            color: var(--accent-color) !important;
+            text-decoration: none !important;
+            font-size: 1.2em !important;
+            font-family: 'Ubuntu', sans-serif !important;
+        }
+
+        .search-container .gs-title:hover {
+            text-decoration: underline !important;
+        }
+
+        .search-container .gs-title b {
+            color: var(--accent-color) !important;
+        }
+
+        .search-container .gsc-url-top {
+            color: #4CAF50 !important;
+            font-size: 0.9em !important;
+        }
+
+        .search-container .gs-snippet {
+            color: var(--secondary-text) !important;
+            font-size: 1em !important;
+            line-height: 1.6 !important;
+            margin: 8px 0 !important;
+        }
+
+        .search-container .gs-snippet b {
+            color: var(--text-color) !important;
+            font-weight: bold !important;
+        }
+
+        .search-container .gsc-cursor-page {
+            color: var(--text-color) !important;
+            background-color: var(--base-variant) !important;
+            padding: 8px 12px !important;
+            margin: 4px !important;
+            border-radius: 4px !important;
+        }
+
+        .search-container .gsc-cursor-page:hover {
+            background-color: var(--accent-color) !important;
+            color: white !important;
+        }
+
+        .search-container .gsc-cursor-current-page {
+            background-color: var(--accent-color) !important;
+            color: white !important;
+        }
+
+        .search-container .gsc-results .gsc-cursor-box {
+            margin: 20px 0 !important;
+            text-align: center !important;
+        }
+
+        /* Modal Close Button */
+        .search-container .gsc-results-close-btn {
+            color: var(--text-color) !important;
+            background-color: var(--base-variant) !important;
+            padding: 8px !important;
+            border-radius: 50% !important;
+        }
+
+        .search-container .gsc-results-close-btn:hover {
+            background-color: var(--accent-color) !important;
+            color: white !important;
+        }
+
+        /* Remove Unwanted Elements */
+        .search-container .gcsc-find-more-on-google {
+            display: none !important;
+        }
+
+        .search-container .gcsc-more-maybe-branding-root {
+            display: none !important;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <h1>Choosy's Search</h1>
+    </header>
+
+    <!-- Main Content Section -->
+    <main>
+        <!-- Search Container -->
+        <div class="search-container">
+            <h2>Search Anything</h2>
+            <!-- Google Custom Search -->
+            <div class="gcse-searchbox-only" data-resultsUrl="results.html"></div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2024 | <a href="#">Privacy Policy</a></p>
+    </footer>
+
+    <!-- Theme Switcher Button -->
+    <div id="theme-switch" onclick="toggleTheme()">
+        <!-- Light Mode Icon (Sun) -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37c-.39-.39-1.03-.39-1.41 0-.39.39-.39 1.03 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0 .39-.39.39-1.03 0-1.41l-1.06-1.06zm1.06-10.96c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36c.39-.39.39-1.03 0-1.41-.39-.39-1.03-.39-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>
+        </svg>
+        <!-- Dark Mode Icon (Moon) -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-3.03 0-5.5-2.47-5.5-5.5 0-1.82.89-3.42 2.26-4.4-.44-.06-.9-.1-1.36-.1z"/>
+        </svg>
+    </div>
+
+    <!-- Google Custom Search Script -->
+    <script async src="https://cse.google.com/cse.js?cx=10110e1df76294941"></script>
+
+    <script>
+        // Check for saved theme preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.body.classList.add('darkmode');
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('darkmode');
+            // Save theme preference
+            localStorage.setItem('darkMode', document.body.classList.contains('darkmode'));
+        }
+    </script>
+
+</body>
+</html>
